@@ -12,7 +12,10 @@ class Settings(BaseSettings) :
     jwt_algorithm : str 
     jwt_access_token_expire_minutes : int 
 
-    model_config = SettingsConfigDict(env_file='.env')
+    # model_config = SettingsConfigDict(env_file='.env')
+    #use the below line for production 
+    model_config = SettingsConfigDict(env_file='/home/ubuntu/app/.env')
+
 
 settings = Settings()
 # print(settings.model_dump())
