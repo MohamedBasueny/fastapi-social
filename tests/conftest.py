@@ -8,12 +8,11 @@ from sqlalchemy.orm import sessionmaker
 from app.database import get_db , Base
 import pytest 
 
-# SQLALCHEMY_DATABASE_URL = "postgresql://postgres:0716103235@localhost/fastapi_test"
-SQLALCHEMY_DATABASE_URL_testing = "postgresql://postgres:0716103235@postgres/fastapi_test"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:0716103235@localhost/fastapi_test"
 
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL_testing,
+    SQLALCHEMY_DATABASE_URL,
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 #use this to create tables based on the models .... must import Base from database.py
