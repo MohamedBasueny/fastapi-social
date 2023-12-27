@@ -62,20 +62,16 @@ async def create_post (post:PostCreate , response:Response,db:Session=Depends(ge
 async def get_post_by_id (id:int , response:Response,db:Session=Depends(get_db), current_user : UserOut = Depends(get_current_user)) :
     # post = cursor.execute("""SELECT * FROM posts WHERE id = %s """ ,
     #                        params=(str(id),)).fetchone()
-    try :
-        post = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).\
-            join(models.Vote, models.Post.id == models.Vote.post_id, isouter=True).\
-            group_by(models.Post.id)\
-            .filter(models.Post.owner_id == current_user.id).one()
-        
-    except NoResultFound :
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND , 
-                            detail=f"couldn't find post with id = {id} & user_id = {current_user.id}")
-    except Exception as e :
-        raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED 
-                            ,detail= f"this error has accoured \nerror {e}")
-                           
+    post = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(
+        models.Vote, models.Vote.post_id == models.Post.id, isouter=True).group_by(models.Post.id).filter(models.Post.id == id).first()
+
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"post with id: {id} was not found")
+
     return post
+
+
     
 
 
@@ -112,3 +108,4 @@ async def update_post_id (id:int , post:PostUpdate , db:Session=Depends(get_db),
     updated_post_model.update(post.model_dump(),synchronize_session=False)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+

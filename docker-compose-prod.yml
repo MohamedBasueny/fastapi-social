@@ -1,0 +1,34 @@
+# run this with the command : docker compose -f <docker compose name>
+version: '3'
+services:
+  api:
+    image: #img that you pushed to the hub --> mohamedwithesmileyface/imagename:tag
+    depends_on:
+      - postgres
+    ports:
+      - 5000:5000
+    command: uvicorn app.main:app --host 0.0.0.0 --port 5000 
+    environment:
+      #access the env variables from global scoop via the ( ${} )  
+      - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_ALGORITHM=${JWT_ALGORITHM}
+      - JWT_ACCESS_TOKEN_EXPIRE_MINUTES=${JWT_ACCESS_TOKEN_EXPIRE_MINUTES}
+
+  postgres: 
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+
+    volumes:
+      - postgres-db:/var/lib/postgresql/data 
+
+volumes:
+  postgres-db:
+
+

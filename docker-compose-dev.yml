@@ -1,0 +1,29 @@
+version: '3'
+services:
+  api:
+    build: .
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+    ports:
+      - 5000:5000
+    volumes:
+      - ./:/usr/src/app:ro
+
+    command: uvicorn app.main:app --host 0.0.0.0 --port 5000 --reload 
+  
+
+  postgres: 
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=fastapi 
+
+    volumes:
+      - postgres-db:/var/lib/postgresql/data 
+
+volumes:
+  postgres-db:
+
+

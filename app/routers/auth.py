@@ -13,19 +13,19 @@ router = APIRouter(
 )
 
 
-@router.post("/login" , status_code=status.HTTP_200_OK , response_model=Token)
+@router.post("/login")
 async def login(user_credentials : Annotated[OAuth2PasswordRequestForm, Depends()] , db : Session = Depends(get_db)):
 
     user = db.query(User).filter(User.email == user_credentials.username).first()
     
     if not user :
-        return HTTPException(status_code=status.HTTP_403_FORBIDDEN ,
-                             detail=f"couldn't find a user with this email : {user_credentials.username}")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN ,
+                             detail=f"couldn't find a user with this email :{user_credentials.username}")
 
     are_passwords_match = verify_passwords(user_credentials.password ,user.password) 
 
     if not are_passwords_match : 
-        return HTTPException(status_code=status.HTTP_403_FORBIDDEN , detail="invalid password")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN , detail="invalid password")
     
     access_token = create_access_token(data={"id":user.id})
 
