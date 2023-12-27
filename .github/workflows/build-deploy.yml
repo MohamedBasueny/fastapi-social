@@ -1,17 +1,18 @@
 name: Build and Deploy Code 
 on: [push,pull_request]
-env:
-    DATABASE_HOSTNAME=localhost
-    DATABASE_PORT =5432 
-    DATABASE_NAME =fastapi 
-    DATABASE_USERNAME =postgres 
-    DATABASE_PASSWORD=0716103235 
-    JWT_SECRET_KEY =01d272fd9e3e528f697cf10b176cefde0c44f64e0db639a923be717f086396c4 
-    JWT_ALGORITHM =HS256 
-    JWT_ACCESS_TOKEN_EXPIRE_MINUTES=30 
 
 jobs:
     job1:
+        env:
+            DATABASE_HOSTNAME: localhost
+            DATABASE_PORT : 5432 
+            DATABASE_NAME : fastapi 
+            DATABASE_USERNAME : postgres 
+            DATABASE_PASSWORD: 0716103235 
+            JWT_SECRET_KEY : 01d272fd9e3e528f697cf10b176cefde0c44f64e0db639a923be717f086396c4 
+            JWT_ALGORITHM : HS256 
+            JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 30 
+
         runs-on: ubuntu-latest
         strategy:
             matrix:
