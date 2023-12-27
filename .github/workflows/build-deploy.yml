@@ -4,9 +4,24 @@ on: [push,pull_request]
 jobs:
     job1:
         runs-on: ubuntu-latest
+        strategy:
+            matrix:
+              python-version: ["pypy3.9", "pypy3.10", "3.9", "3.10", "3.11", "3.12"]
         steps:
             - name: checking out code 
               uses: actions/checkout@v4
             - name: say hello 
               run: echo "hello moo"
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v4
+              with:
+                python-version: ${{ matrix.python-version }}
+            - name: upgrade pip 
+              run: python -m pip install --upgrade pip 
+            - name: install dependices
+              run: pip install -r  requirements.txt
+            # - name: install pytest if not installed  
+            #   run: pip install pytest 
+            # - name: initiate testing 
+            #   run: python -m pytest 
             
