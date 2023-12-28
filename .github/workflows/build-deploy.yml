@@ -2,7 +2,7 @@ name: Build and Deploy Code
 on: [push, pull_request]
 
 jobs:
-  building:
+  build:
     env:
       DATABASE_HOSTNAME: ${{secrets.DATABASE_HOSTNAME}}
       DATABASE_PORT: ${{secrets.DATABASE_PORT}}
@@ -51,6 +51,7 @@ jobs:
     
   docker:
     runs-on: ubuntu-latest  
+    needs: [build]
     steps:      
         - 
           name: Login to Docker Hub
@@ -69,3 +70,12 @@ jobs:
             # file: ./Dockerfile
             push: true
             tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastapi:latest
+            cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/fastapi:latest
+            cache-to: type=inline
+  deploy:
+    runs-on: ubuntu-latest  
+    needs: [docker]
+    steps:
+      - 
+        name: testing deployment 
+        run: echo "hello deployer guy! "
