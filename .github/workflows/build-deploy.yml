@@ -65,7 +65,7 @@ jobs:
           name: Build and push
           uses: docker/build-push-action@v5
           with:
-            context: ../Dockerfile
-            file: /home/basueny/learningProjects/fastapi-project/Dockerfile
+            context: .
+            file: /home/runner/work/fastapi-social/fastapi-social/Dockerfile
             push: true
             tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastapi:latest
