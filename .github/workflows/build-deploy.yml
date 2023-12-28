@@ -79,3 +79,15 @@ jobs:
       - 
         name: testing deployment 
         run: echo "hello deployer guy! "
+      - 
+        name: deploy to ec2 ubuntu server using ssh and a private key 
+        uses: appleboy/ssh-action@v1.0.1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY_RSA }}
+          script: |
+            whoami
+            cd app/src 
+            git pull 
+            sudo systemctl restart  api
